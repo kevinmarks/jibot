@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import cPickle as pickle
-import sqlite
+import sqlite3 as sqlite
 import re
 
 class JibotDatabase:

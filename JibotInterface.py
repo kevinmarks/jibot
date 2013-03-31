@@ -239,7 +239,7 @@ class JibotMessage(irclib.IrcMessage):
 
     def parse(self,line):
         self.from_string(line)
-        self._root.logger.debug("Parsing: %s"%(line))
+        self._root.logger.debug("Parsing: for '%s' in %s "%(self._root.cmd_chars,line))
         if "JOIN" == self.command:
             self.channel = self.params[0]
         if "PRIVMSG" == self.command:
@@ -257,8 +257,9 @@ class JibotMessage(irclib.IrcMessage):
                 self.channel = self.recipient
                 self.private = False
             if self._root.check_identification:
-                if self.text[0] == '+': self.identified=True
-                self.text = self.text[1:]
+                if self.text[0] == '+': 
+                    self.identified=True
+                    self.text = self.text[1:]
             self.cmd, self.rest = self.get_cmd(self.text)
             self._root.set_cur_channel(self.channel)
        
