@@ -4,11 +4,11 @@
 # You will have to change the infiles for all the functions to make it work
 # Escape functions grabbed from Glen Starchman on the python mailing list
 import cPickle as pickle
-import sqlite
+import sqlite3 as sqlite
+import json
 
 mappings = {"'":"''",
-           '"':'""',
-           ' ':'+'
+           '"':'""'
            }
 
 def escape_list(l):
@@ -67,6 +67,23 @@ def convert_def(infile="jibdb.def",outfile="jibot.def.sqlite"):
     for k,v in defs.items():
         key = escape(k)
         value = escape(" & ".join(v))
+        cu.execute("INSERT INTO def (key, value) VALUES('%s', '%s')"%(key, value))
+    cx.commit()
+
+def convert_jsondef(infile="defdb.txt",outfile="jibot.olddef.sqlite"):
+    f = open(infile, "r")
+    defs = eval(f.read())
+    f.close()
+    print defs['sleep']
+    print defs['cameo']
+    print defs['zzgavin']
+    print defs['the devil']
+    cx = sqlite.connect(outfile)
+    cu = cx.cursor()
+    cu.execute("CREATE TABLE def (key VARCHAR, value VARCHAR)")
+    for k,v in defs.items():
+        key = escape(k)
+        value = escape(v)
         cu.execute("INSERT INTO def (key, value) VALUES('%s', '%s')"%(key, value))
     cx.commit()
     
@@ -143,6 +160,9 @@ def convert_herald(infile="jibdb.herald",outfile="jibot.herald.sqlite"):
     cx.commit()
 
 def main():
+    convert_jsondef()
+    
+def oldmain():    
     convert_def()
     convert_karma()
     convert_alias()
