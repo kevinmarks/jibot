@@ -98,8 +98,7 @@ class JibotDatabase:
 
 # Escape functions grabbed from Glen Starchman on the python mailing list
 mappings = {"'":"''",
-           '"':'""',
-           ' ':'+'
+           '"':'""'
            }
 
 def escape_list(l):
@@ -219,7 +218,10 @@ class SQLite(JibotDatabase):
                 args = escape(item['args'])
                 table = escape(self._table)
                 if "set" == cmd:
-                    cu.execute("UPDATE %s SET value='%s' WHERE key='%s'"%(table,args[1],args[0]))
+                    try:
+                        cu.execute("UPDATE %s SET value='%s' WHERE key='%s'"%(table,args[1],args[0]))
+                    except:
+                        self._logger.exception("Failed to UPDATE %s SET value='%s' WHERE key='%s'"%(table,args[1],args[0]))
                 elif "put" == cmd:
                     cu.execute("INSERT INTO %s (key, value) VALUES ('%s', '%s')"%(table,args[0],args[1]))
                 elif "remove" == cmd:
