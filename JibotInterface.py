@@ -753,22 +753,24 @@ class HeraldHandler(MessageHandler):
             if not self._defDB.has_def(nick) and self._defDB.has_def(self._aliasDB.get(nick)):
                 master_nick = self._aliasDB.get(nick)
                 if self._heraldDB.get_herald_nick(master_nick):
-                    self._root.say("%s is aka %s; %s was %s"%(nick,master_nick,master_nick,self._defDB.get_def(master_nick,end=1,join=True)))
+                    self._root.say("%s is aka %s; %s is %s"%(nick,master_nick,master_nick,self._defDB.get_def(master_nick,end=1,join=True)))
                 else:
-                    self._root.say("%s is aka %s; %s was %s"%(nick,master_nick,master_nick,self._defDB.get_def(master_nick,join=True)))
+                    self._root.say("%s is aka %s; %s is %s"%(nick,master_nick,master_nick,self._defDB.get_def(master_nick,join=True)))
                 self._favorHandler.say_favor(nick)              
             elif self._defDB.has_def(nick):
                 if self._heraldDB.get_herald_nick(nick):
-                    self._root.say("%s was %s"%(nick,self._defDB.get_def(nick,end=1,join=True)))
+                    self._root.say("%s is %s"%(nick,self._defDB.get_def(nick,end=1,join=True)))
                 else:
-                    self._root.say("%s was %s"%(nick,self._defDB.get_def(nick,join=True)))
+                    self._root.say("%s is %s"%(nick,self._defDB.get_def(nick,join=True)))
                 self._favorHandler.say_favor(nick)
             self.set_last_herald(nick)
     
     def say_herald_unknown(self,nick):
         unknownphrases = ( \
-                    "Welcome, %s; is this your first time here?", \
+                    "Welcome, %s; is this your first time here? I have memory lapses, you know.", \
                     "Willkommen, bienvenue, welcome %s, im Cabaret, au Cabaret, to Cabaret", \
+                    "Hello %s - if you joined after 2007 I may have forgotten you.", \
+                    "Hi %s, have we met? I was abducted by sqlite aliens in 2007 and have missing time.", \
                     "Milords, Ladies and Gentlemen, please welcome %s")
         self._root.say(unknownphrases[int(random.random() *len(unknownphrases))] %(nick))
     
